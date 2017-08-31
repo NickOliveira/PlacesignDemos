@@ -1,0 +1,53 @@
+import java.io.DataOutputStream;
+import java.io.OutputStream;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+
+public class EventSignalsTest {
+private final static String URL = "https://api.placesign.com/v1/Thing/SimWait001/Signal.json/Increment/01xKcDBtw0JcmCAQ-6g0sIqNWqTwgUIz23xIAi1F9yN6oAPtrjR-dElHgvchHODT8r";
+private final static String EVENT_SIGNAL = "{\"Signals\":[{\"SignalType\": 8,\"Values\":[{" +
+        "\"DataType\": \"7\",\"SignalValueType\": \"19\",\"UnitType\": \"1007\",\"Value\": \"1\"},{" + 
+        "\"DataType\": \"1\",\"SignalValueType\": \"20\",\"UnitType\": \"7\",\"Value\": \"2016-08-16T16:30:49Z\"},{" +
+        "\"DataType\": \"1\",\"SignalValueType\": \"21\",\"UnitType\": \"7\",\"Value\": \"2016-08-16T16:42:34Z\"},{" +
+        "\"DataType\": \"0\",\"SignalValueType\": \"27\",\"UnitType\": \"0\",\"Value\": \"ContentResource\"}" +
+       "]}]}";
+           
+public static void main(String[] args){
+                      sendEventSignal();
+           }
+           
+           public static void sendEventSignal()
+           {
+                      try{
+                             URL url = new URL(URL);    
+                             HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+                             con.setRequestMethod("POST");
+                             con.setRequestProperty("User-Agent", "PlaceSign/1.0");
+                             con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+                             con.setRequestProperty("Content-Length", String.valueOf(EVENT_SIGNAL.length()));
+                             con.setRequestProperty("Content-type", "application/json");
+                             con.setDoOutput(true);
+                             
+                                                
+                             OutputStream os = con.getOutputStream();
+                             DataOutputStream wr = new DataOutputStream(os);
+                                                        
+                            
+                             System.out.println("Sending Event Signal to : " + URL);
+                             System.out.println("Signal: " + EVENT_SIGNAL);
+                             
+                             wr.writeBytes(EVENT_SIGNAL);
+                                               
+                             wr.flush();
+                             wr.close();
+                                                                                
+                             int responseCode = con.getResponseCode();
+                             System.out.println("Response Code: " + responseCode);
+                                 
+                      } catch(Exception e)
+                      {
+                                 System.out.println("Fail in sendEventSignal: " + e.getMessage());
+                      }
+           }
+}
